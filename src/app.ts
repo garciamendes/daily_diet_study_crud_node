@@ -1,0 +1,19 @@
+// Third party
+import 'dotenv/config'
+import fastify from 'fastify'
+import cors from '@fastify/cors'
+import cookie from '@fastify/cookie'
+
+// Local
+import { env } from './env'
+import { usersRoutes } from './routes/users'
+
+export const server = fastify()
+
+server.register(cors, {
+  origin: env.ALLOWED_ORIGINS,
+  credentials: true,
+  methods: ['POST', 'GET', 'DELETE', 'PUT', 'PATCH']
+})
+server.register(cookie)
+server.register(usersRoutes)
