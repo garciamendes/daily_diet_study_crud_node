@@ -15,8 +15,8 @@ export interface IUser {
   modified: string
 }
 
-interface ICustomRequest extends FastifyRequest {
-  user?: IUser
+export interface ICustomRequest extends FastifyRequest {
+  user_id?: string
 }
 
 interface IJwtUserPayload extends JwtPayload {
@@ -40,7 +40,7 @@ export const verifyToken: preHandlerHookHandler = async (req: ICustomRequest, re
       return res.status(401).send({ message: 'Invalid token' })
     }
 
-    req.user = user
+    req.user_id = user.id
     return next()
   } catch (error) {
     return res.status(401).send({ message: 'Invalid token' })

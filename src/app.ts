@@ -2,11 +2,11 @@
 import 'dotenv/config'
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import cookie from '@fastify/cookie'
 
 // Local
 import { env } from './env'
 import { usersRoutes } from './routes/users'
+import { snacksRoutes } from './routes/snacks'
 
 export const server = fastify()
 
@@ -15,5 +15,5 @@ server.register(cors, {
   credentials: true,
   methods: ['POST', 'GET', 'DELETE', 'PUT', 'PATCH']
 })
-server.register(cookie)
 server.register(usersRoutes)
+server.register(snacksRoutes, { prefix: 'snack' })

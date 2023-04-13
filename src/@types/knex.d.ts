@@ -6,10 +6,20 @@ declare module 'knex/types/tables' {
     users: {
       id: string
       name: string
+      avatar: string | null,
       email: string
       password: string
       created: string
       modified: string
+    }
+    snack: {
+      id: string
+      name: string
+      description: string,
+      date: string,
+      hour: string,
+      is_diet: boolean
+      user_id: string
     }
   }
 }
