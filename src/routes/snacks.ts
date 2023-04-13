@@ -3,7 +3,7 @@ import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { randomUUID } from 'crypto'
 
-// Local
+// Project
 import { knex } from '../database'
 import { ICustomRequest, verifyToken } from '../middlewares/check-token'
 

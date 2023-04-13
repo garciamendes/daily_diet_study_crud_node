@@ -6,11 +6,9 @@ import { randomUUID } from 'crypto'
 import jwt from 'jsonwebtoken'
 
 // Project
+import { knex } from '../database'
 import { validarEmail } from '../utils/check-valid-email'
 import { verifyToken } from '../middlewares/check-token'
-
-// Local
-import { knex } from '../database'
 
 export async function usersRoutes(server: FastifyInstance) {
   server.post('/register', async (request, reply) => {
@@ -39,7 +37,6 @@ export async function usersRoutes(server: FastifyInstance) {
     await knex('users').insert({ id: randomUUID(), name, email, password: hashedPassword })
     return reply.status(201).send({ message: 'User created successfully' })
   }),
-
   server.post('/login', async (request, reply) => {
     const createUser = z.object({
       email: z.string(),
