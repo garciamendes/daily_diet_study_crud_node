@@ -32,7 +32,7 @@ export async function usersRoutes(server: FastifyInstance) {
     if (isEmailExist)
       return reply.status(400).send({ message: 'Email already exists' })
 
-    const salt = await bcrypt.genSalt()
+    const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
     await knex('users').insert({ id: randomUUID(), name, email, password: hashedPassword })
     return reply.status(201).send({ message: 'User created successfully' })
@@ -47,11 +47,11 @@ export async function usersRoutes(server: FastifyInstance) {
     const user = await knex('users').where('email', email).first()
 
     if (!user)
-      return reply.status(400).send({ message: 'Invalid email or password' })
+      return reply.status(401).send({ message: 'Invalid email or password' })
 
     const validPassword = await bcrypt.compare(password, user.password)
     if (!validPassword)
-      return reply.status(400).send({ message: 'Invalid email or password' })
+      return reply.status(401).send({ message: 'Invalid email or password' })
 
     const token = jwt.sign({ id: user.id }, 'secret_key', { expiresIn: '1 days', algorithm: 'HS512' })
     const userInfo = {

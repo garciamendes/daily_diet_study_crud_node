@@ -12,7 +12,6 @@ export const server = fastify()
 
 server.register(cors, {
   origin: env.ALLOWED_ORIGINS,
-  credentials: true,
   methods: ['POST', 'GET', 'DELETE', 'PUT', 'PATCH']
 })
 server.register(usersRoutes)

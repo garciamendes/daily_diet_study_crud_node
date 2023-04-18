@@ -1,4 +1,9 @@
 // Third party
 import { combineReducers } from 'redux'
 
-export default combineReducers([])
+// Local
+import { createUserReducer } from './account/reducers'
+
+export default combineReducers({
+  create_user: createUserReducer
+})
