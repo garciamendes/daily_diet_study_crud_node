@@ -8,6 +8,7 @@ declare module 'knex/types/tables' {
       name: string
       avatar: string | null,
       email: string
+      uid_random: string,
       password: string
       created: string
       modified: string
@@ -20,6 +21,6 @@ declare module 'knex/types/tables' {
       hour: string,
       is_diet: boolean
       user_id: string
-    }
+    },
   }
 }

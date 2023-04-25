@@ -23,7 +23,7 @@ export const loginUserReducer = (state = default_state_login_user, action) => {
   return produce(state, draft => {
     switch (action.type) {
       case IAccountType.LOGIN_USER_SUCCESS:
-        return action.payload
+        return action.payload.user
       default:
         return draft
     }

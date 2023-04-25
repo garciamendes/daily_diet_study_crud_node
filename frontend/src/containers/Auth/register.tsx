@@ -56,7 +56,7 @@ export const Register = () => {
     setIsCreateUserLoading(true)
     dispatch(createUser(data, {
       onFinish: () => {
-        history.push('/login')
+        history.goBack()
       },
       onFinally: () => { setIsCreateUserLoading(false) }
     }))

@@ -7,6 +7,15 @@ export const GlobalStyle = createGlobalStyle`
     --red-dark: #BF3B44;
     --red-mid: #F3BABD;
     --red-light: #F4E6E7;
+    --orange-dark: #ff7700;
+    --orange-mid: #ff973c;
+    --orange-light: #ffb778;
+    --yellow-dark: #ffe900;
+    --yellow-mid: #ffee3e;
+    --yellow-light: #fff47f;
+    --blue-dark: #1700ff;
+    --blue-mid: #402eff;
+    --blue-light: #6487f8;
     --green-dark: #639339;
     --green-mid: #CBE4B4;
     --green-light: #E5F0DB;
@@ -26,11 +35,18 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   html, body, #root {
+    position: relative;
     height: 100%;
     font-family: 'Nunito Sans', sans-serif;
 
     input {
       outline: none;
     }
+  }
+
+  .flex-full-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;

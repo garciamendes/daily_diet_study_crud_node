@@ -48,6 +48,7 @@ export function* loginUserSagas({ payload, callback }: loginUserType) {
       })
 
       localStorage.setItem('token', response.data.token)
+      sessionStorage.setItem('user', JSON.stringify(response.data.user))
     }
 
     if (typeof (callback) == 'object' && has(callback, 'onFinish'))

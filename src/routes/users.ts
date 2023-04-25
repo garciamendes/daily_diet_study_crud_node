@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken'
 // Project
 import { knex } from '../database'
 import { validarEmail } from '../utils/check-valid-email'
-import { verifyToken } from '../middlewares/check-token'
+import { ICustomRequest, verifyToken } from '../middlewares/check-token'
 
 export async function usersRoutes(server: FastifyInstance) {
   server.post('/register', async (request, reply) => {
@@ -37,44 +37,44 @@ export async function usersRoutes(server: FastifyInstance) {
     await knex('users').insert({ id: randomUUID(), name, email, password: hashedPassword })
     return reply.status(201).send({ message: 'User created successfully' })
   }),
-  server.post('/login', async (request, reply) => {
-    const createUser = z.object({
-      email: z.string(),
-      password: z.string()
+    server.post('/login', async (request, reply) => {
+      const createUser = z.object({
+        email: z.string(),
+        password: z.string()
+      })
+
+      const { email, password } = createUser.parse(request.body)
+      const user = await knex('users').where('email', email).first()
+
+      if (!user)
+        return reply.status(401).send({ message: 'Invalid email or password' })
+
+
+      const validPassword = await bcrypt.compare(password, user.password)
+      if (!validPassword)
+        return reply.status(401).send({ message: 'Invalid email or password' })
+
+      const token = jwt.sign({ id: user.id }, 'secret_key', { expiresIn: '1 days' })
+      const userInfo = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }
+
+      return reply.status(200).send({ user: userInfo, token: token })
+    }),
+    server.patch('/user/profile/:id', { preHandler: verifyToken }, async (request, reply) => {
+      const updateUser = z.object({
+        name: z.string()
+      })
+      const getRequestParams = z.object({
+        id: z.string().uuid(),
+      })
+
+      const { name } = updateUser.parse(request.body)
+      const { id } = getRequestParams.parse(request.params)
+
+      await knex('users').where('id', id).update({ name, modified: String(new Date()) })
+      return reply.status(200).send({ message: 'User updated successfully' })
     })
-
-    const { email, password } = createUser.parse(request.body)
-    const user = await knex('users').where('email', email).first()
-
-    if (!user)
-      return reply.status(401).send({ message: 'Invalid email or password' })
-
-    const validPassword = await bcrypt.compare(password, user.password)
-    if (!validPassword)
-      return reply.status(401).send({ message: 'Invalid email or password' })
-
-    const token = jwt.sign({ id: user.id }, 'secret_key', { expiresIn: '1 days', algorithm: 'HS512' })
-    const userInfo = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      token: token
-    }
-
-    return reply.status(200).send(userInfo)
-  })
-  server.patch('/user/profile/:id', { preHandler: [verifyToken] }, async (request, reply) => {
-    const updateUser = z.object({
-      name: z.string()
-    })
-    const getRequestParams = z.object({
-      id: z.string().uuid(),
-    })
-
-    const { name } = updateUser.parse(request.body)
-    const { id } = getRequestParams.parse(request.params)
-
-    await knex('users').where('id', id).update({ name, modified: String(new Date()) })
-    return reply.status(200).send({ message: 'User updated successfully'})
-  })
 }

@@ -1,4 +1,4 @@
-import { createUser, loginUser } from "./actions"
+import { createUser, loginUser, logoutUser } from "./actions"
 
 export enum IAccountType {
   CREATE_USER = 'CREATE_USER',
@@ -6,6 +6,8 @@ export enum IAccountType {
 
   LOGIN_USER = 'LOGIN_USER',
   LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS',
+
+  LOGOUT_USER = 'LOGOUT_USER',
 }
 
 export interface IAccountData {

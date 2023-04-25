@@ -16,6 +16,7 @@ export const Routes = () => {
         <PublicRoute path='/login' component={Login} />
         <PublicRoute path='/register' component={Register} />
         <PublicRoute path='/not-found' component={NotFound} />
+        {/* <PublicRoute path='/' component={Home} /> */}
         <PrivateRoute path='/' component={Home} />
       </Switch>
     </BrowserRouter>

@@ -1,7 +1,6 @@
 // Third party
 import { ArrowRight, Eye, EyeClosed } from '@phosphor-icons/react'
 import { isEqual } from 'lodash'
-import bcrypt from 'bcryptjs'
 
 // Local
 import { ContainerMain } from './styles'

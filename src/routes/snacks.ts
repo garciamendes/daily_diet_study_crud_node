@@ -7,16 +7,25 @@ import { randomUUID } from 'crypto'
 import { knex } from '../database'
 import { ICustomRequest, verifyToken } from '../middlewares/check-token'
 
-export async function snacksRoutes(server: FastifyInstance) {
-  server.post('/', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
-    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/
-    const hourRegex = /^\d{2}:\d{2}$/
+export interface ISnack {
+  name: string,
+  description: string,
+  date: string,
+  hour: string,
+  is_diet: boolean | null
+}
 
+export interface IListSnack {
+  [key: string]: ISnack[]
+}
+
+export async function snacksRoutes(server: FastifyInstance) {
+  server.post('/', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
     const createSnack = z.object({
       name: z.string(),
       description: z.string(),
-      date: z.string().regex(dateRegex),
-      hour: z.string().regex(hourRegex),
+      date: z.string(),
+      hour: z.string(),
       is_diet: z.boolean().optional()
     })
 
@@ -40,15 +49,13 @@ export async function snacksRoutes(server: FastifyInstance) {
       return reply.status(500).send({ message: 'Failed to register meal' })
     }
   }),
-    server.patch('/:id', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
-      const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/
-      const hourRegex = /^\d{2}:\d{2}$/
+    server.patch('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
 
       const updateSnack = z.object({
         name: z.string().optional(),
         description: z.string().optional(),
-        date: z.string().regex(dateRegex).optional(),
-        hour: z.string().regex(hourRegex).optional(),
+        date: z.string().optional(),
+        hour: z.string().optional(),
         is_diet: z.boolean().optional()
       })
 
@@ -68,14 +75,25 @@ export async function snacksRoutes(server: FastifyInstance) {
       await knex('snack').where('user_id', user_id).where('id', id).update({ name, description, date, hour, is_diet })
       return reply.status(200).send({ message: 'Meal updated successfully' })
     }),
-    server.get('/', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
+    server.get('/', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
       const id = request.user_id
       const list_snack = await knex('snack')
         .where('user_id', id)
         .select('*')
-        .orderBy('date')
+        .orderBy('date', 'desc')
 
-      return reply.status(200).send(list_snack)
+      let list_snack_map: IListSnack = {}
+      for (let snack of list_snack) {
+        if (snack.date in list_snack_map) {
+          list_snack_map[snack.date].push(snack)
+        } else {
+          list_snack_map[snack.date] = [snack]
+        }
+
+        list_snack_map[snack.date].sort((a, b) => b.hour.localeCompare(a.hour))
+      }
+
+      return reply.status(200).send(list_snack_map)
     }),
     server.get('/summary', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
       const id = request.user_id
@@ -105,7 +123,7 @@ export async function snacksRoutes(server: FastifyInstance) {
 
       let results_data = {
         'dietCount': data['dietCount'],
-        'dietPercent': Number(Math.round(data['dietCount'] / data['totalSnack'] * 100).toFixed(1)),
+        'dietPercent': Number(Math.round(data['dietCount'] / data['totalSnack'] * 100).toFixed(1)) ?? null,
         'noDietCount': data['noDietCount'],
         'totalSnack': data['totalSnack'],
         'dietSequence': data['dietSequence'].length
@@ -113,7 +131,7 @@ export async function snacksRoutes(server: FastifyInstance) {
 
       return reply.status(200).send(results_data)
     }),
-    server.get('/:id', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
+    server.get('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
       const getRequestParams = z.object({
         id: z.string().uuid(),
       })
@@ -123,7 +141,7 @@ export async function snacksRoutes(server: FastifyInstance) {
       const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
       return reply.status(200).send(snack)
     }),
-    server.delete('/:id', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
+    server.delete('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
       const getRequestParams = z.object({
         id: z.string().uuid(),
       })

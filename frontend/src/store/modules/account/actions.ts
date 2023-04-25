@@ -19,3 +19,8 @@ export const loginUser = (data: IAccountLogin, callback?: ICallback | (() => voi
   payload: data,
   callback
 })
+
+export const logoutUser = (callback?: ICallback | (() => void)) => ({
+  type: IAccountType.LOGOUT_USER,
+  callback
+})
