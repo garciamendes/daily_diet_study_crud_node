@@ -20,7 +20,16 @@ export interface ICustomRequest extends FastifyRequest {
 }
 
 interface IJwtUserPayload extends JwtPayload {
-  uid_random: string;
+  id: string;
+}
+
+async function verifyTokenPromise(token: string, secret: string) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) reject(err)
+      resolve(decoded)
+    })
+  })
 }
 
 export const verifyToken: preHandlerHookHandler = async (req: ICustomRequest, res: FastifyReply, next: () => void) => {
@@ -33,7 +42,7 @@ export const verifyToken: preHandlerHookHandler = async (req: ICustomRequest, re
   }
 
   try {
-    const decoded = jwt.verify(token, 'secret_key') as IJwtUserPayload
+    const decoded = await verifyTokenPromise(token, 'secret_key') as IJwtUserPayload
     const user = await knex('users').where('id', decoded.id).first()
 
     if (!user) {

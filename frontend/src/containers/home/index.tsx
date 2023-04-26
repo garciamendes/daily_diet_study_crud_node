@@ -113,7 +113,12 @@ export const Home = () => {
             </div>
           ) : (
             <>
-              <ArrowUpRight className='icon-nav-summary' size={25} />
+              {!fetchSummaryLoading && (
+                <ArrowUpRight
+                  onClick={() => history.push('/summary')}
+                  className='icon-nav-summary'
+                  size={25} />
+              )}
               <h1>{summary.dietPercent ? `${summary.dietPercent}%` : '---'}</h1>
               <p>das refeições dentro da dieta</p>
             </>
@@ -141,7 +146,7 @@ export const Home = () => {
                   {map(snacks, (item) => {
                     const itemHour = new Date()
                     const [hour, minute] = item.hour.split(':')
-                    itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+                    itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0)
 
                     return (
                       <ContentSnack>

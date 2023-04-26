@@ -54,7 +54,7 @@ export async function usersRoutes(server: FastifyInstance) {
       if (!validPassword)
         return reply.status(401).send({ message: 'Invalid email or password' })
 
-      const token = jwt.sign({ id: user.id }, 'secret_key', { expiresIn: '1 days' })
+      const token = jwt.sign({ id: user.id }, 'secret_key')
       const userInfo = {
         id: user.id,
         name: user.name,

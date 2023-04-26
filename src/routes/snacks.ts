@@ -95,7 +95,7 @@ export async function snacksRoutes(server: FastifyInstance) {
 
       return reply.status(200).send(list_snack_map)
     }),
-    server.get('/summary', { preHandler: [verifyToken] }, async (request: ICustomRequest, reply) => {
+    server.get('/summary', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
       const id = request.user_id
       const list_snack = await knex('snack')
         .where('user_id', id)

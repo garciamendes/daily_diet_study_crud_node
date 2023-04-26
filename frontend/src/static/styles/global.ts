@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     --orange-light: #ffb778;
     --yellow-dark: #ffe900;
     --yellow-mid: #ffee3e;
-    --yellow-light: #fff47f;
+    --yellow-light: #FAF7D1;
     --blue-dark: #1700ff;
     --blue-mid: #402eff;
     --blue-light: #6487f8;

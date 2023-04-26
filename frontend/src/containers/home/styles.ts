@@ -2,9 +2,9 @@
 import styled from 'styled-components'
 
 export interface IStatistic {
-  bgColor: string,
-  iconColor: string
-  textColor: string
+  bgColor?: string,
+  iconColor?: string
+  textColor?: string
 }
 
 export const ContainerMainHome = styled.div`
@@ -76,15 +76,15 @@ export const StatisticInfo = styled.div<IStatistic>`
   justify-content: center;
   padding: 2rem;
   border-radius: 12px;
-  background: ${props => props.bgColor};
-  color: ${props => props.textColor};
+  background: ${props => props.bgColor ?? 'var(--gray-7)'};
+  color: ${props => props.textColor ?? 'var(--gray-7)'};
 
   .icon-nav-summary {
     cursor: pointer;
     position: absolute;
     right: 7px;
     top: 7px;
-    color: ${props => props.iconColor};
+    color: ${props => props.iconColor ?? 'var(--gray-7)'};
   }
 `
 
