@@ -33,15 +33,15 @@ async function verifyTokenPromise(token: string, secret: string) {
 }
 
 export const verifyToken: preHandlerHookHandler = async (req: ICustomRequest, res: FastifyReply, next: () => void) => {
-  const { headers } = req
-  const authHeader = headers.authorization
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (!token) {
-    return res.status(401).send({ message: 'Access token not found' })
-  }
-
   try {
+    const { headers } = req
+    const authHeader = headers.authorization
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (!token) {
+      return res.status(401).send({ message: 'Access token not found' })
+    }
+
     const decoded = await verifyTokenPromise(token, 'secret_key') as IJwtUserPayload
     const user = await knex('users').where('id', decoded.id).first()
 

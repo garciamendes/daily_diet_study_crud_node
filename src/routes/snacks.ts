@@ -20,7 +20,7 @@ export interface IListSnack {
 }
 
 export async function snacksRoutes(server: FastifyInstance) {
-  server.post('/', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.post('/snack', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
     const createSnack = z.object({
       name: z.string(),
       description: z.string(),
@@ -49,106 +49,113 @@ export async function snacksRoutes(server: FastifyInstance) {
       return reply.status(500).send({ message: 'Failed to register meal' })
     }
   }),
-    server.patch('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.patch('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
 
-      const updateSnack = z.object({
-        name: z.string().optional(),
-        description: z.string().optional(),
-        date: z.string().optional(),
-        hour: z.string().optional(),
-        is_diet: z.boolean().optional()
-      })
-
-      const {
-        name,
-        description,
-        date,
-        hour,
-        is_diet
-      } = updateSnack.parse(request.body)
-      const getRequestParams = z.object({
-        id: z.string().uuid(),
-      })
-      const { id } = getRequestParams.parse(request.params)
-      const user_id = request.user_id
-
-      await knex('snack').where('user_id', user_id).where('id', id).update({ name, description, date, hour, is_diet })
-      return reply.status(200).send({ message: 'Meal updated successfully' })
-    }),
-    server.get('/', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-      const id = request.user_id
-      const list_snack = await knex('snack')
-        .where('user_id', id)
-        .select('*')
-        .orderBy('date', 'desc')
-
-      let list_snack_map: IListSnack = {}
-      for (let snack of list_snack) {
-        if (snack.date in list_snack_map) {
-          list_snack_map[snack.date].push(snack)
-        } else {
-          list_snack_map[snack.date] = [snack]
-        }
-
-        list_snack_map[snack.date].sort((a, b) => b.hour.localeCompare(a.hour))
-      }
-
-      return reply.status(200).send(list_snack_map)
-    }),
-    server.get('/summary', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-      const id = request.user_id
-      const list_snack = await knex('snack')
-        .where('user_id', id)
-        .select('*')
-        .orderBy('date')
-
-      let data = {
-        'dietCount': 0,
-        'noDietCount': 0,
-        'totalSnack': 0,
-        'dietSequence': [] as string[]
-      }
-
-      for (let snack of list_snack) {
-        if (snack.is_diet) {
-          data['dietCount'] += 1
-          data['dietSequence'].push(snack.id)
-        } else {
-          data['dietSequence'] = []
-          data['noDietCount'] += 1
-        }
-
-        data['totalSnack'] += 1
-      }
-
-      let results_data = {
-        'dietCount': data['dietCount'],
-        'dietPercent': Number(Math.round(data['dietCount'] / data['totalSnack'] * 100).toFixed(1)) ?? null,
-        'noDietCount': data['noDietCount'],
-        'totalSnack': data['totalSnack'],
-        'dietSequence': data['dietSequence'].length
-      }
-
-      return reply.status(200).send(results_data)
-    }),
-    server.get('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-      const getRequestParams = z.object({
-        id: z.string().uuid(),
-      })
-      const { id } = getRequestParams.parse(request.params)
-      const user_id = request.user_id
-
-      const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
-      return reply.status(200).send(snack)
-    }),
-    server.delete('/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-      const getRequestParams = z.object({
-        id: z.string().uuid(),
-      })
-      const { id } = getRequestParams.parse(request.params)
-      const user_id = request.user_id
-
-      await knex('snack').where('user_id', user_id).where('id', id).delete()
-      return reply.status(204).send({ message: 'Successfully Deleted Meal' })
+    const updateSnack = z.object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      date: z.string().optional(),
+      hour: z.string().optional(),
+      is_diet: z.boolean().optional()
     })
+
+    const {
+      name,
+      description,
+      date,
+      hour,
+      is_diet
+    } = updateSnack.parse(request.body)
+    const getRequestParams = z.object({
+      id: z.string().uuid(),
+    })
+    const { id } = getRequestParams.parse(request.params)
+    const user_id = request.user_id
+
+    await knex('snack').where('user_id', user_id).where('id', id).update({ name, description, date, hour, is_diet })
+    return reply.status(200).send({ message: 'Meal updated successfully' })
+  }),
+  server.get('/snack', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+    const id = request.user_id
+    const list_snack = await knex('snack')
+      .where('user_id', id)
+      .select('*')
+      .orderBy('date', 'desc')
+
+    let totalSnacks = 0
+    let dietCount = 0
+    let list_snack_map: IListSnack = {}
+    for (let snack of list_snack) {
+      if (snack.is_diet)
+        dietCount += 1
+
+      if (snack.date in list_snack_map) {
+        list_snack_map[snack.date].push(snack)
+      } else {
+        list_snack_map[snack.date] = [snack]
+      }
+
+      list_snack_map[snack.date].sort((a, b) => b.hour.localeCompare(a.hour))
+      totalSnacks += 1
+    }
+
+    let dietPercent = Number(Math.round(dietCount / totalSnacks * 100).toFixed(1)) ?? null
+    return reply.status(200).send({ results: list_snack_map, dietPercent })
+  }),
+  server.get('/snack/summary', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+    const id = request.user_id
+    const list_snack = await knex('snack')
+      .where('user_id', id)
+      .select('*')
+      .orderBy('date')
+
+    let data = {
+      'dietCount': 0,
+      'noDietCount': 0,
+      'totalSnack': 0,
+      'dietSequence': [] as string[]
+    }
+
+    for (let snack of list_snack) {
+      if (snack.is_diet) {
+        data['dietCount'] += 1
+        data['dietSequence'].push(snack.id)
+      } else {
+        data['dietSequence'] = []
+        data['noDietCount'] += 1
+      }
+
+      data['totalSnack'] += 1
+    }
+
+    let results_data = {
+      'dietCount': data['dietCount'],
+      'dietPercent': Number(Math.round(data['dietCount'] / data['totalSnack'] * 100).toFixed(1)) ?? null,
+      'noDietCount': data['noDietCount'],
+      'totalSnack': data['totalSnack'],
+      'dietSequence': data['dietSequence'].length
+    }
+
+    return reply.status(200).send(results_data)
+  }),
+  server.get('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+    const getRequestParams = z.object({
+      id: z.string().uuid(),
+    })
+    const { id } = getRequestParams.parse(request.params)
+    const user_id = request.user_id
+
+    const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
+    return reply.status(200).send(snack)
+  }),
+  server.delete('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+    const getRequestParams = z.object({
+      id: z.string().uuid(),
+    })
+    const { id } = getRequestParams.parse(request.params)
+    const user_id = request.user_id
+
+    await knex('snack').where('user_id', user_id).where('id', id).delete()
+    return reply.status(204).send({ message: 'Successfully Deleted Meal' })
+  })
 }

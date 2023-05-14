@@ -32,8 +32,7 @@ export async function usersRoutes(server: FastifyInstance) {
     if (isEmailExist)
       return reply.status(400).send({ message: 'Email already exists' })
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
+    const hashedPassword = await bcrypt.hash(password, 6)
     await knex('users').insert({ id: randomUUID(), name, email, password: hashedPassword })
     return reply.status(201).send({ message: 'User created successfully' })
   }),

@@ -5,6 +5,7 @@ import { combineReducers } from 'redux'
 import { createUserReducer, loginUserReducer } from './account/reducers'
 import {
   createSnackReducer,
+  fetchDetailSnackReducer,
   fetchListSnackReducer,
   fetchSummaryReducer
 } from './snack/reducers'
@@ -16,5 +17,6 @@ export default combineReducers({
   // snack
   create_snack: createSnackReducer,
   fetch_list_snack: fetchListSnackReducer,
+  fetch_detail_snack: fetchDetailSnackReducer,
   fetch_summary: fetchSummaryReducer,
 })

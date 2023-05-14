@@ -14,8 +14,23 @@ export const fetchListSnack = (callback?: ICallback | (() => void)) => ({
   type: ISnackTypes.FETCH_LIST_SNACK,
   callback
 })
+export const clearListSnack = () => ({
+  type: ISnackTypes.CLEAR_LIST_SNACK,
+})
+
+export const fetchDetailSnack = (snack_id: string, callback?: ICallback | (() => void)) => ({
+  type: ISnackTypes.FETCH_DETAIL_SNACK,
+  payload: { snack_id },
+  callback
+})
+export const clearDetailSnack = () => ({
+  type: ISnackTypes.CLEAR_DETAIL_SNACK
+})
 
 export const fetchSummary = (callback?: ICallback | (() => void)) => ({
   type: ISnackTypes.FETCH_SUMMARY,
   callback
+})
+export const clearSummary = () => ({
+  type: ISnackTypes.CLEAR_SUMMARY
 })

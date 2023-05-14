@@ -1,16 +1,17 @@
 // React
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Third party
-import { ArrowLeft } from '@phosphor-icons/react'
-import { isEqual, isNull } from 'lodash'
+import { X } from '@phosphor-icons/react'
+import { isEmpty, isEqual, isNull } from 'lodash'
 import { toast } from 'react-hot-toast'
 
 // Project
 import { Button, LabelColorSnack } from '../../containers/home/styles'
 import { ISnack } from '../../store/modules/snack/types'
-import { useDispatch } from 'react-redux'
 import { createSnack } from '../../store/modules/snack/actions'
+import { IState } from '../../store/utils/types'
 import { Loader } from '../loader'
 
 // Local
@@ -20,7 +21,17 @@ const default_state = {
   name: '', description: '', date: '', hour: '', is_diet: null
 }
 
-export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }) => {
+interface IModalProps {
+  open: boolean,
+  onClose: () => void,
+  isUpdate?: boolean,
+  fetch?: () => void
+}
+
+export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModalProps) => {
+  // Redux
+  const detail_snack = useSelector<IState, ISnack>(store => store.fetch_detail_snack)
+
   // State
   const [isDiet, setIsDiet] = useState<number | null>(null)
   const [createSnackLoading, setCreateSnackLoading] = useState(false)
@@ -28,6 +39,20 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }) => {
 
   // Hook
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isUpdate && !isEmpty(detail_snack)) {
+      const {
+        date, description, hour, is_diet,
+        name, id
+      } = detail_snack
+
+      setForm({
+        date, description, hour, name, id, is_diet
+      })
+      setIsDiet(is_diet ? 1 : 0)
+    }
+  }, [detail_snack])
 
   const handleSelectIsdiet = (value: number) => {
     if (!isEqual(value, isDiet))
@@ -56,7 +81,7 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }) => {
       dispatch(createSnack(data, {
         onFinish: () => {
           setCreateSnackLoading(false)
-          fetch()
+          fetch?.()
           finishModal()
         },
         onError: () => {
@@ -81,7 +106,7 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }) => {
     <ContainerMainModal open={open}>
       <ContentModal>
         <header>
-          <ArrowLeft className='icon_back' onClick={finishModal} size={25} />
+          <X className='icon_back' onClick={finishModal} size={25} />
           <strong>Nova refeição</strong>
         </header>
 
@@ -129,7 +154,7 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }) => {
               <button
                 type='button'
                 onClick={() => handleSelectIsdiet(1)}
-                className={isEqual(isDiet, 1) ? 'is_diet' : ''}>
+                className={(isEqual(isDiet, 1)) ? 'is_diet' : ''}>
                 <LabelColorSnack bgColor='#639339'></LabelColorSnack>
                 Sim
               </button>

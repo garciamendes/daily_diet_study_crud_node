@@ -16,5 +16,6 @@ export interface IState {
   user_login: IUserData,
   create_snack: ISnack,
   fetch_list_snack: IListSnack,
+  fetch_detail_snack: ISnack,
   fetch_summary: ISummary,
 }

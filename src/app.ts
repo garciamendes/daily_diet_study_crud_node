@@ -15,4 +15,4 @@ server.register(cors, {
   methods: ['POST', 'GET', 'DELETE', 'PUT', 'PATCH']
 })
 server.register(usersRoutes)
-server.register(snacksRoutes, { prefix: 'snack' })
+server.register(snacksRoutes)
