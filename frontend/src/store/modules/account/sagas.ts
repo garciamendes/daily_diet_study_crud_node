@@ -3,9 +3,10 @@ import { AxiosError, AxiosResponse } from 'axios'
 import { has } from 'lodash'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { toast } from 'react-hot-toast'
+import secureLocalStorage from 'react-secure-storage'
 
 // Project
-import { AuthTokenHeader, api } from '../../../services/api'
+import { api } from '../../../services/api'
 
 // Local
 import { IAccountType, createUserType, loginUserType } from './types'
@@ -47,8 +48,8 @@ export function* loginUserSagas({ payload, callback }: loginUserType) {
         payload: response.data
       })
 
-      sessionStorage.setItem('token', response.data.token)
-      sessionStorage.setItem('user', JSON.stringify(response.data.user))
+      secureLocalStorage.setItem('token', response.data.token)
+      secureLocalStorage.setItem('user', response.data.user)
     }
 
     if (typeof (callback) == 'object' && has(callback, 'onFinish'))
@@ -56,7 +57,6 @@ export function* loginUserSagas({ payload, callback }: loginUserType) {
 
   } catch (error: any) {
     toast.error('Erro ao tentar fazer o login')
-    toast.error(error['message'])
 
     if (typeof (callback) == 'object' && has(callback, 'onError'))
       callback.onError?.()

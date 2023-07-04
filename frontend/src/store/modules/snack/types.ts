@@ -31,7 +31,7 @@ export interface IListSnack {
   results: {
     [key: string]: ISnack[]
   },
-  dietPercent: number
+  dietPercent: number | null
 }
 
 export interface ISummary {

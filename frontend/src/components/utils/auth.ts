@@ -1,5 +1,7 @@
+import secureLocalStorage from "react-secure-storage"
+
 export const isAuthenticated = () => {
-  if (sessionStorage.getItem('token')) {
+  if (secureLocalStorage.getItem('token')) {
     return true
   }
 

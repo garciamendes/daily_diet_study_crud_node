@@ -1,11 +1,11 @@
 // Third party
-import { BrowserRouter, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 // Local
 import { Home } from './containers/home'
 import { PublicRoute } from './components/PublicRoute'
-import { NotFound } from './components/NotFound'
 import { PrivateRoute } from './components/privateRoute'
+import { NotFound } from './components/NotFound'
 import { Login } from './containers/Auth/login'
 import { Register } from './containers/Auth/register'
 import { Summary } from './containers/summary'
@@ -15,14 +15,14 @@ export const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <PublicRoute path='/login' component={Login} />
-        <PublicRoute path='/register' component={Register} />
+        <Route path='/' exact component={Login} />
+        <Route path='/register' component={Register} />
 
-        <PrivateRoute path='/home' exact component={Home} />
-        <PrivateRoute path='/snack/:id' exact component={SnackDetail} />
-        <PrivateRoute path='/snack/summary' exact component={Summary} />
+        <Route path='/home' component={Home} />
+        <Route path='/snack/:id' component={SnackDetail} />
+        <Route path='/summary' component={Summary} />
 
-        <PrivateRoute path='*' component={NotFound} />
+        <Route path='*' component={NotFound} />
       </Switch>
     </BrowserRouter>
   )

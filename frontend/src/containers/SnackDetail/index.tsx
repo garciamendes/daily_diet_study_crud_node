@@ -19,6 +19,7 @@ import { clearDetailSnack, fetchDetailSnack } from "../../store/modules/snack/ac
 // Local
 import { ContainerDetailSnack, LabelInfo } from "./styles"
 import { isNull } from "lodash"
+import { AxiosResponse } from "axios"
 
 export const SnackDetail = () => {
   // Redux
@@ -37,15 +38,15 @@ export const SnackDetail = () => {
   useEffect(() => {
     setFetchDetailSnackLoading(true)
     dispatch(fetchDetailSnack(snack_id, {
-      onFinish: () => {
+      onFinish: (response) => {
+        const data: ISnack = response?.data
         const itemHour = new Date()
-        const [hour, minute] = detail_snack.hour.split(':')
+        const [hour, minute] = data.hour.split(':')
         itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0)
         sethourDetail(itemHour)
-      },
-      onFinally: () => {
         setFetchDetailSnackLoading(false)
-      }
+      },
+      onError: () => setFetchDetailSnackLoading(false)
     }))
 
     // return () => { dispatch(clearDetailSnack()) }
@@ -54,7 +55,7 @@ export const SnackDetail = () => {
   return (
     <ContainerDetailSnack>
       {fetchDetailSnackLoading ? (
-        <div className='flex-full-center'>
+        <div className='flex-full-center margin-top-1-rem'>
           <Loader />
         </div>
       ) : (

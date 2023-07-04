@@ -16,7 +16,10 @@ export const createSnackReducer = (state = default_state, action) => {
   })
 }
 
-const default_state_list_snack: IListSnack = {}
+const default_state_list_snack: IListSnack = {
+  results: {},
+  dietPercent: null
+}
 export const fetchListSnackReducer = (state = default_state_list_snack, action) => {
   return produce(state, draft => {
     switch (action.type) {
@@ -24,8 +27,7 @@ export const fetchListSnackReducer = (state = default_state_list_snack, action) 
         draft = action.payload
         return draft
       case ISnackTypes.CLEAR_LIST_SNACK:
-        draft = default_state_list_snack
-        return draft
+        return default_state_list_snack
       default:
         return draft
     }
@@ -43,8 +45,7 @@ export const fetchDetailSnackReducer = (state = default_state_detail_snack, acti
         draft = action.payload
         return draft
       case ISnackTypes.CLEAR_DETAIL_SNACK:
-        draft = default_state_detail_snack
-        return draft
+        return default_state_detail_snack
       default:
         return draft
     }
@@ -62,8 +63,7 @@ export const fetchSummaryReducer = (state = default_state_summary, action) => {
         draft = action.payload
         return draft
       case ISnackTypes.CLEAR_SUMMARY:
-        draft = default_state_summary
-        return draft
+        return default_state_summary
       default:
         return draft
     }

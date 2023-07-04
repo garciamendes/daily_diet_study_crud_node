@@ -12,6 +12,10 @@ import { snacksRoutes } from './routes/snacks'
 
 export const server = fastify()
 
+server.register(cors, {
+  origin: env.ALLOWED_ORIGINS
+})
+
 server.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
@@ -24,10 +28,6 @@ server.register(fastifyJwt, {
 })
 server.register(fastifyCookie)
 
-server.register(cors, {
-  origin: env.ALLOWED_ORIGINS,
-  credentials: true
-})
 
 server.register(usersRoutes)
 server.register(snacksRoutes)

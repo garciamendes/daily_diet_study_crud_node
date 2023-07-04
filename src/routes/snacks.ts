@@ -146,7 +146,8 @@ export async function snacksRoutes(server: FastifyInstance) {
     const user_id = request.user.sub
 
     const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
-    return reply.status(200).send(snack)
+    const USnack = { ...snack, user_id: undefined }
+    return reply.status(200).send(USnack)
   }),
   server.delete('/snack/:id', { onRequest: [verifyJwt] }, async (request, reply) => {
     const getRequestParams = z.object({

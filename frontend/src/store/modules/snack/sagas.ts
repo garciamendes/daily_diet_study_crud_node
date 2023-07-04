@@ -28,7 +28,7 @@ export function* createSnackSagas({ payload, callback }: createSnack) {
     }
 
     if (typeof (callback) == 'object' && has(callback, 'onFinish'))
-      callback.onFinish?.()
+      callback.onFinish?.(response)
 
   } catch (error: any) {
     toast.error('Erro ao tentar cadastrar a refeição')

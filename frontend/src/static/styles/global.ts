@@ -50,6 +50,10 @@ export const GlobalStyle = createGlobalStyle`
     justify-content: center;
   }
 
+  .margin-top-1-rem {
+    margin-top: 1rem !important;
+  }
+
   .cursor-pointer {
     cursor: pointer !important;
   }

@@ -30,6 +30,7 @@ import {
   LabelColorSnack,
   StatisticInfo
 } from './styles'
+import secureLocalStorage from 'react-secure-storage'
 
 export const Home = () => {
   // Redux
@@ -51,9 +52,9 @@ export const Home = () => {
   }, [])
 
   useEffect(() => {
-    const userString = sessionStorage.getItem('user') ?? ''
-    const user: IUserData = JSON.parse(userString)
-    let initialName = split(user.name, '')
+    const userString = secureLocalStorage.getItem('user') as IUserData
+    const { name } = userString
+    let initialName = split(name, '')
 
     if (!initialName[0] || !initialName[1])
       setUserDate({ name: '#' })
@@ -67,9 +68,9 @@ export const Home = () => {
   }
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token')
-    sessionStorage.removeItem('user')
-    history.push('/login')
+    secureLocalStorage.removeItem('token')
+    secureLocalStorage.removeItem('user')
+    history.push('/')
   }
 
   return (
@@ -105,7 +106,7 @@ export const Home = () => {
               <ArrowUpRight
                 onClick={(event) => {
                   event.stopPropagation()
-                  history.push('/snack/summary')
+                  history.push('/summary')
                 }}
                 className='icon-nav-summary'
                 size={25} />
@@ -131,7 +132,7 @@ export const Home = () => {
           ) : (
             map(results, (snacks, index) => {
               return (
-                <div className='content_snack_by_date'>
+                <div key={index} className='content_snack_by_date'>
                   <strong className='title_date'>{format(new Date(index), 'dd.MM.yy')}</strong>
                   {map(snacks, (item) => {
                     const itemHour = new Date()
@@ -139,7 +140,7 @@ export const Home = () => {
                     itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0)
 
                     return (
-                      <ContentSnack onClick={(event) => {
+                      <ContentSnack key={item.id} onClick={(event) => {
                         event.stopPropagation()
                         history.push(`/snack/${item.id}`)
                       }}>

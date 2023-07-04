@@ -1,13 +1,13 @@
 // Third part
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 
 // Project
 import { IUserData } from '../modules/account/types'
 import { IListSnack, ISnack, ISummary } from '../modules/snack/types'
 
 export interface ICallback {
-  onFinish?: (response?: AxiosResponse) => void,
-  onError?: (response?: Error) => void,
+  onFinish?: (response?: AxiosResponse<any>) => void,
+  onError?: (response?: AxiosError) => void,
   onFinally?: () => void
 }
 
