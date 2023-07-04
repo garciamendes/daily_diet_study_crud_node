@@ -2,6 +2,8 @@
 import 'dotenv/config'
 import fastify from 'fastify'
 import cors from '@fastify/cors'
+import fastifyJwt from '@fastify/jwt'
+import fastifyCookie from '@fastify/cookie'
 
 // Local
 import { env } from './env'
@@ -10,9 +12,22 @@ import { snacksRoutes } from './routes/snacks'
 
 export const server = fastify()
 
+server.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+  cookie: {
+    cookieName: 'refreshToken',
+    signed: false,
+  },
+  sign: {
+    expiresIn: '10m',
+  },
+})
+server.register(fastifyCookie)
+
 server.register(cors, {
   origin: env.ALLOWED_ORIGINS,
-  methods: ['POST', 'GET', 'DELETE', 'PUT', 'PATCH']
+  credentials: true
 })
+
 server.register(usersRoutes)
 server.register(snacksRoutes)

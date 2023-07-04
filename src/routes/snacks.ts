@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto'
 
 // Project
 import { knex } from '../database'
-import { ICustomRequest, verifyToken } from '../middlewares/check-token'
+import { verifyJwt } from '../middlewares/check-token'
 
 export interface ISnack {
   name: string,
@@ -20,7 +20,7 @@ export interface IListSnack {
 }
 
 export async function snacksRoutes(server: FastifyInstance) {
-  server.post('/snack', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.post('/snack', { onRequest: [verifyJwt] }, async (request, reply) => {
     const createSnack = z.object({
       name: z.string(),
       description: z.string(),
@@ -36,7 +36,7 @@ export async function snacksRoutes(server: FastifyInstance) {
       hour,
       is_diet
     } = createSnack.parse(request.body)
-    const user_id = request.user_id
+    const user_id = request.user.sub
 
     if (!description || !date || !name || !hour)
       return reply.status(400).send({ message: 'All fields are mandatory' })
@@ -49,7 +49,7 @@ export async function snacksRoutes(server: FastifyInstance) {
       return reply.status(500).send({ message: 'Failed to register meal' })
     }
   }),
-  server.patch('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.patch('/snack/:id', { onRequest: [verifyJwt] }, async (request, reply) => {
 
     const updateSnack = z.object({
       name: z.string().optional(),
@@ -70,13 +70,13 @@ export async function snacksRoutes(server: FastifyInstance) {
       id: z.string().uuid(),
     })
     const { id } = getRequestParams.parse(request.params)
-    const user_id = request.user_id
+    const user_id = request.user.sub
 
     await knex('snack').where('user_id', user_id).where('id', id).update({ name, description, date, hour, is_diet })
     return reply.status(200).send({ message: 'Meal updated successfully' })
   }),
-  server.get('/snack', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-    const id = request.user_id
+  server.get('/snack', { onRequest: [verifyJwt] }, async (request, reply) => {
+    const id = request.user.sub
     const list_snack = await knex('snack')
       .where('user_id', id)
       .select('*')
@@ -102,8 +102,8 @@ export async function snacksRoutes(server: FastifyInstance) {
     let dietPercent = Number(Math.round(dietCount / totalSnacks * 100).toFixed(1)) ?? null
     return reply.status(200).send({ results: list_snack_map, dietPercent })
   }),
-  server.get('/snack/summary', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
-    const id = request.user_id
+  server.get('/snack/summary', { onRequest: [verifyJwt] }, async (request, reply) => {
+    const id = request.user.sub
     const list_snack = await knex('snack')
       .where('user_id', id)
       .select('*')
@@ -138,22 +138,22 @@ export async function snacksRoutes(server: FastifyInstance) {
 
     return reply.status(200).send(results_data)
   }),
-  server.get('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.get('/snack/:id', { onRequest: [verifyJwt] }, async (request, reply) => {
     const getRequestParams = z.object({
       id: z.string().uuid(),
     })
     const { id } = getRequestParams.parse(request.params)
-    const user_id = request.user_id
+    const user_id = request.user.sub
 
     const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
     return reply.status(200).send(snack)
   }),
-  server.delete('/snack/:id', { preHandler: verifyToken }, async (request: ICustomRequest, reply) => {
+  server.delete('/snack/:id', { onRequest: [verifyJwt] }, async (request, reply) => {
     const getRequestParams = z.object({
       id: z.string().uuid(),
     })
     const { id } = getRequestParams.parse(request.params)
-    const user_id = request.user_id
+    const user_id = request.user.sub
 
     await knex('snack').where('user_id', user_id).where('id', id).delete()
     return reply.status(204).send({ message: 'Successfully Deleted Meal' })
