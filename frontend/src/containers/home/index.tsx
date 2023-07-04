@@ -67,7 +67,7 @@ export const Home = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
     sessionStorage.removeItem('user')
     history.push('/login')
   }
@@ -85,7 +85,7 @@ export const Home = () => {
           <img src={LogoImg} alt='Logo' />
 
           <div className='content_logout_avatar'>
-            <span onClick={handleLogout}>Sair</span>
+            <span className='cursor-pointer' onClick={handleLogout}>Sair</span>
             <Avatar>
               {userData.name ?? '#'}
             </Avatar>
@@ -102,12 +102,13 @@ export const Home = () => {
             </div>
           ) : (
             <>
-              {!fetchListSnackLoading && (
-                <ArrowUpRight
-                  onClick={() => history.push('/snack/summary')}
-                  className='icon-nav-summary'
-                  size={25} />
-              )}
+              <ArrowUpRight
+                onClick={(event) => {
+                  event.stopPropagation()
+                  history.push('/snack/summary')
+                }}
+                className='icon-nav-summary'
+                size={25} />
               <h1>{dietPercent ? `${dietPercent}%` : '---'}</h1>
               <p>das refeições dentro da dieta</p>
             </>
@@ -138,7 +139,10 @@ export const Home = () => {
                     itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0)
 
                     return (
-                      <ContentSnack onClick={() => history.push(`/snack/${item.id}`)}>
+                      <ContentSnack onClick={(event) => {
+                        event.stopPropagation()
+                        history.push(`/snack/${item.id}`)
+                      }}>
                         <strong className='hours'>{format(itemHour, 'HH:MM')}</strong>
                         <div className='content_name_snack_and_label'>
                           <span className='title_snack'>{item.name}</span>

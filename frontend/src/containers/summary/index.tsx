@@ -32,7 +32,7 @@ export const Summary = () => {
   useEffect(() => {
     setFetchSummaryLoading(true)
     dispatch(fetchSummary(() => setFetchSummaryLoading(false)))
-  })
+  }, [])
 
   return (
     <ContainerMainHome>

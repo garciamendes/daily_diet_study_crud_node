@@ -42,7 +42,6 @@ export const SnackDetail = () => {
         const [hour, minute] = detail_snack.hour.split(':')
         itemHour.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0)
         sethourDetail(itemHour)
-        setFetchDetailSnackLoading(false)
       },
       onFinally: () => {
         setFetchDetailSnackLoading(false)

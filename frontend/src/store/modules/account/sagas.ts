@@ -47,7 +47,7 @@ export function* loginUserSagas({ payload, callback }: loginUserType) {
         payload: response.data
       })
 
-      localStorage.setItem('token', response.data.token)
+      sessionStorage.setItem('token', response.data.token)
       sessionStorage.setItem('user', JSON.stringify(response.data.user))
     }
 

@@ -46,4 +46,4 @@ export const api = axios.create({
   baseURL: 'http://localhost:3001'
 })
 
-export const AuthTokenHeader = localStorage.getItem('token')
+export const AuthTokenHeader = sessionStorage.getItem('token')

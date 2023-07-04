@@ -44,7 +44,7 @@ export const Login = () => {
     dispatch(loginUser(data, {
       onFinish: () => {
         setIsLoginUserLoading(false)
-        history.push('/')
+        history.push('/home')
       },
       onError: () => setIsLoginUserLoading(false)
     }))

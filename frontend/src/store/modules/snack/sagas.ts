@@ -14,7 +14,7 @@ export function* createSnackSagas({ payload, callback }: createSnack) {
   try {
     const response: AxiosResponse = yield call(api.post, '/snack', payload, {
       headers: {
-        Authorization: `Token ${AuthTokenHeader}`
+        Authorization: `Bearer ${AuthTokenHeader}`
       }
     })
 
@@ -48,7 +48,7 @@ export function* fetchListSnackSagas({ callback }: fetchListSnack) {
   try {
     const response: AxiosResponse = yield call(api.get, '/snack', {
       headers: {
-        Authorization: `Token ${AuthTokenHeader}`
+        Authorization: `Bearer ${AuthTokenHeader}`
       }
     })
 
@@ -80,7 +80,7 @@ export function* fetchDetailSnackSagas({ payload, callback }: fetchDetailSnack) 
   try {
     const response: AxiosResponse = yield call(api.get, `/snack/${payload.snack_id}`, {
       headers: {
-        Authorization: `Token ${AuthTokenHeader}`
+        Authorization: `Bearer ${AuthTokenHeader}`
       }
     })
 
@@ -112,7 +112,7 @@ export function* fetchSummarySagas({ callback }: fetchSummary) {
   try {
     const response: AxiosResponse = yield call(api.get, '/snack/summary', {
       headers: {
-        Authorization: `Token ${AuthTokenHeader}`
+        Authorization: `Bearer ${AuthTokenHeader}`
       }
     })
 
@@ -128,7 +128,6 @@ export function* fetchSummarySagas({ callback }: fetchSummary) {
 
   } catch (error: any) {
     toast.error('Erro ao tentar carregar as estatísticas')
-    console.error(error['message'])
 
     if (typeof (callback) == 'object' && has(callback, 'onError'))
       callback.onError?.()

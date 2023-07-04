@@ -1,5 +1,5 @@
 export const isAuthenticated = () => {
-  if (localStorage.getItem('token')) {
+  if (sessionStorage.getItem('token')) {
     return true
   }
 
