@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast'
 import { AuthTokenHeader, api } from '../../../services/api'
 
 // Local
-import { ISnackTypes, createSnack, fetchDetailSnack, fetchListSnack, fetchSummary, updateSnack } from './types'
+import { ISnackTypes, createSnack, deleteSnack, fetchDetailSnack, fetchListSnack, fetchSummary, updateSnack } from './types'
 
 export function* createSnackSagas({ payload, callback }: createSnack) {
   try {
@@ -68,6 +68,40 @@ export function* updateSnackSagas({ payload, callback }: updateSnack) {
 
   } catch (error: any) {
     toast.error('Erro ao tentar atualzar a refeição')
+
+    if (typeof (callback) == 'object' && has(callback, 'onError'))
+      callback.onError?.()
+  }
+
+  if (typeof (callback) == 'function')
+    callback?.()
+  else if (typeof (callback) == 'object' && has(callback, 'onFinally'))
+    callback.onFinally?.()
+}
+
+export function* deleteSnackSagas({ payload, callback }: deleteSnack) {
+
+  const { snack_id } = payload
+  try {
+    const response: AxiosResponse = yield call(api.delete, `/snack/${snack_id}`, {
+      headers: {
+        Authorization: `Bearer ${AuthTokenHeader}`
+      }
+    })
+
+    if (response.status === 204) {
+      yield put({
+        type: ISnackTypes.DELETE_SNACK_SUCCESS,
+      })
+
+      toast.success('Refeição deletada com sucesso')
+    }
+
+    if (typeof (callback) == 'object' && has(callback, 'onFinish'))
+      callback.onFinish?.()
+
+  } catch (error: any) {
+    toast.error('Erro ao tentar deletar a refeição')
 
     if (typeof (callback) == 'object' && has(callback, 'onError'))
       callback.onError?.()
@@ -177,6 +211,7 @@ export function* fetchSummarySagas({ callback }: fetchSummary) {
 export default all([
   takeLatest(ISnackTypes.CREATE_SNACK, createSnackSagas),
   takeLatest(ISnackTypes.UPDATE_SNACK, updateSnackSagas),
+  takeLatest(ISnackTypes.DELETE_SNACK, deleteSnackSagas),
   takeLatest(ISnackTypes.FETCH_LIST_SNACK, fetchListSnackSagas),
   takeLatest(ISnackTypes.FETCH_DETAIL_SNACK, fetchDetailSnackSagas),
   takeLatest(ISnackTypes.FETCH_SUMMARY, fetchSummarySagas),

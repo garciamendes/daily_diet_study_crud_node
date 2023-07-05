@@ -1,6 +1,6 @@
 // React
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
 
@@ -9,6 +9,7 @@ import { Loader } from '../../loader'
 
 // Local
 import { Button, ContainerMainModal, ContentModal } from './styles'
+import { deleteSnack } from '../../../store/modules/snack/actions'
 
 interface IModalProps {
   open: boolean,
@@ -21,17 +22,19 @@ export const ModalSnackDelete = ({ open, onClose }: IModalProps) => {
 
   // Hook
   const dispatch = useDispatch()
+  const history = useHistory()
   const { id: snack_id } = useParams<{ id: string }>()
 
   const handleOnDelete = () => {
-    // setDeleteSnackLoading(true)
-    // dispatch(deleteSnack(snack_id, {
-    //   onFinish: () => {
-    //     setDeleteSnackLoading(false)
-    //     onClose()
-    //   },
-    //   onError: () => setDeleteSnackLoading(false)
-    // }))
+    setDeleteSnackLoading(true)
+    dispatch(deleteSnack(snack_id, {
+      onFinish: () => {
+        setDeleteSnackLoading(false)
+        onClose()
+        history.push('/home')
+      },
+      onError: () => setDeleteSnackLoading(false)
+    }))
   }
 
   return (

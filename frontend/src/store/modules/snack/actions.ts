@@ -15,6 +15,12 @@ export const updateSnack = (snack_id: string, data: ISnack, callback?: ICallback
   callback
 })
 
+export const deleteSnack = (snack_id: string, callback?: ICallback | (() => void)) => ({
+  type: ISnackTypes.DELETE_SNACK,
+  payload: { snack_id },
+  callback
+})
+
 export const fetchListSnack = (callback?: ICallback | (() => void)) => ({
   type: ISnackTypes.FETCH_LIST_SNACK,
   callback

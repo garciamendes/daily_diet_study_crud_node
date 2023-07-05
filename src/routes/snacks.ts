@@ -158,6 +158,6 @@ export async function snacksRoutes(server: FastifyInstance) {
     const user_id = request.user.sub
 
     await knex('snack').where('user_id', user_id).where('id', id).delete()
-    return reply.status(204).send({ message: 'Successfully Deleted Meal' })
+    return reply.status(204).send()
   })
 }
