@@ -15,7 +15,7 @@ import secureLocalStorage from 'react-secure-storage'
 // Project
 import LogoImg from '../../static/images/logo.svg'
 import { getColorRange } from '../../components/utils/getColorRange'
-import { ModaSnackCreateUpdate } from '../../components/modal'
+import { ModalSnackCreateUpdate } from '../../components/modal/create-update-snack'
 import { IState } from '../../store/utils/types'
 import { IUserData } from '../../store/modules/account/types'
 import { fetchListSnack } from '../../store/modules/snack/actions'
@@ -77,7 +77,7 @@ export const Home = () => {
 
   return (
     <ContainerMainHome>
-      <ModaSnackCreateUpdate
+      <ModalSnackCreateUpdate
         open={showModal}
         isUpdate={false}
         fetch={handleFetchSummaryAndListSnacks}

@@ -57,4 +57,10 @@ export const GlobalStyle = createGlobalStyle`
   .cursor-pointer {
     cursor: pointer !important;
   }
+
+  .outline {
+    background: transparent !important;
+    border: 1px solid var(--gray-1);
+    color: var(--gray-1);
+  }
 `;

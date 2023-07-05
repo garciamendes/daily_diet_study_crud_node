@@ -8,11 +8,11 @@ import { isEmpty, isEqual, isNull } from 'lodash'
 import { toast } from 'react-hot-toast'
 
 // Project
-import { Button, LabelColorSnack } from '../../containers/home/styles'
-import { ISnack } from '../../store/modules/snack/types'
-import { createSnack, updateSnack } from '../../store/modules/snack/actions'
-import { IState } from '../../store/utils/types'
-import { Loader } from '../loader'
+import { Button, LabelColorSnack } from '../../../containers/home/styles'
+import { ISnack } from '../../../store/modules/snack/types'
+import { createSnack, updateSnack } from '../../../store/modules/snack/actions'
+import { IState } from '../../../store/utils/types'
+import { Loader } from '../../loader'
 
 // Local
 import { ContainerMainModal, ContentIsDiet, ContentModal } from './styles'
@@ -29,7 +29,7 @@ interface IModalProps {
   fetch?: () => void
 }
 
-export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModalProps) => {
+export const ModalSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModalProps) => {
   // Redux
   const detail_snack = useSelector<IState, ISnack>(store => store.fetch_detail_snack)
 

@@ -13,13 +13,13 @@ import { IState } from "../../store/utils/types"
 import { Loader } from "../../components/loader"
 import { Button, StatisticInfo } from "../home/styles"
 import { ISnack } from "../../store/modules/snack/types"
-import { ModaSnackCreateUpdate } from "../../components/modal"
+import { ModalSnackCreateUpdate } from "../../components/modal/create-update-snack"
 import { clearDetailSnack, fetchDetailSnack } from "../../store/modules/snack/actions"
 
 // Local
 import { ContainerDetailSnack, LabelInfo } from "./styles"
 import { isNull } from "lodash"
-import { AxiosResponse } from "axios"
+import { ModalSnackDelete } from "../../components/modal/delete-snack"
 
 export const SnackDetail = () => {
   // Redux
@@ -27,6 +27,7 @@ export const SnackDetail = () => {
 
   // State
   const [showModal, setShowModal] = useState(false)
+  const [showModalDelete, setShowModalDelete] = useState(false)
   const [fetchDetailSnackLoading, setFetchDetailSnackLoading] = useState(false)
   const [hourDetail, sethourDetail] = useState<null | Date>(null)
 
@@ -60,10 +61,14 @@ export const SnackDetail = () => {
         </div>
       ) : (
         <>
-          <ModaSnackCreateUpdate
+          <ModalSnackCreateUpdate
             open={showModal}
             isUpdate
             onClose={() => setShowModal(false)} />
+
+          <ModalSnackDelete
+            open={showModalDelete}
+            onClose={() => setShowModalDelete(false)} />
 
           <StatisticInfo
             className='by-detail_snack by-page-detail'
@@ -100,7 +105,7 @@ export const SnackDetail = () => {
                 Editar refeição
               </Button>
 
-              <Button className='outline'>
+              <Button className='outline' onClick={() => setShowModalDelete(true)}>
                 <Trash size={25} />
                 Excluir refeição
               </Button>

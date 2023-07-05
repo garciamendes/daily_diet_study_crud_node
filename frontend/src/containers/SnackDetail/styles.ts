@@ -30,12 +30,6 @@ export const ContainerDetailSnack = styled(ContainerMainHome)`
       width: 100%;
       gap: 10px;
       flex: 1;
-
-      .outline {
-        background: transparent !important;
-        border: 1px solid var(--gray-1);
-        color: var(--gray-1);
-      }
     }
   }
 `
