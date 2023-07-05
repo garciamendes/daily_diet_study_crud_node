@@ -54,6 +54,83 @@ export const ContainerMain = styled.div`
       }
     }
 
+    .container-warning {
+      .warning {
+        position: absolute;
+        cursor: pointer;
+        right: 2rem;
+        top: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        width: 60px;
+        border: none;
+        border-radius: 50px;
+        background: var(--red-dark);
+        color: var(--white);
+
+        &::after {
+          content: '';
+          width: 30px;
+          height: 30px;
+          border-radius: 100%;
+          border: 6px solid var(--red-dark);
+          position: absolute;
+          z-index: -1;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          animation: ring 1.5s infinite;
+        }
+
+        &:hover::after, &:focus::after {
+          animation: none;
+          display: none;
+        }
+
+        @keyframes ring {
+          0% {
+            width: 30px;
+            height: 30px;
+            opacity: 1;
+          }
+          100% {
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+          }
+        }
+      }
+
+      .text-warning-active {
+        opacity: 1 !important;
+        transition: .24s;
+      }
+
+      .text-warning {
+        position: absolute;
+        cursor: pointer;
+        right: 7rem;
+        top: 55px;
+        display: flex;
+        opacity: 0;
+        justify-content: center;
+        align-items: center;
+        width: 20%;
+        padding: .7rem;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        color: var(--white);
+        background: var(--red-dark);
+
+        span {
+          font-weight: 600;
+          font-size: 1.3 !important;
+        }
+      }
+    }
+
     & > form {
       display: flex;
       flex-direction: column;

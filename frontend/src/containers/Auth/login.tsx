@@ -1,11 +1,11 @@
 // Third party
-import { ArrowRight, Eye, EyeClosed } from '@phosphor-icons/react'
+import { ArrowRight, Eye, EyeClosed, Warning } from '@phosphor-icons/react'
 import { isEqual } from 'lodash'
 
 // Local
 import { ContainerMain } from './styles'
 import { FormEvent, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../store/modules/account/actions'
@@ -52,6 +52,14 @@ export const Login = () => {
     }))
   }
 
+  const handleMouseEnter = () => {
+    document.querySelector('div#text-warning-id')?.classList.add('text-warning-active')
+  }
+
+  const handleMouseLeave = () => {
+    document.querySelector('div#text-warning-id')?.classList.remove('text-warning-active')
+  }
+
   return (
     <ContainerMain>
       <div className='content-main'>
@@ -59,6 +67,22 @@ export const Login = () => {
           <span>Registrar</span>
           <ArrowRight size={20} />
         </button>
+
+        <div className='container-warning'>
+          <div
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className='warning'>
+            <Warning size={25} />
+          </div>
+          <div id='text-warning-id' className='text-warning'>
+            <p>
+              <span>Aviso de Privacidade:</span> Sua privacidade é importante para nós! Nossa aplicação não solicita informações sensíveis que possam comprometer você.
+              É importante ressaltar que a aplicação foi desenvolvida estritamente para fins de estudo. Seu conforto e segurança são nossa prioridade.
+            </p>
+          </div>
+        </div>
+
 
         <form onSubmit={handleSubmit}>
           <input
