@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast'
 import { AuthTokenHeader, api } from '../../../services/api'
 
 // Local
-import { ISnackTypes, createSnack, fetchDetailSnack, fetchListSnack, fetchSummary } from './types'
+import { ISnackTypes, createSnack, fetchDetailSnack, fetchListSnack, fetchSummary, updateSnack } from './types'
 
 export function* createSnackSagas({ payload, callback }: createSnack) {
   try {
@@ -33,6 +33,41 @@ export function* createSnackSagas({ payload, callback }: createSnack) {
   } catch (error: any) {
     toast.error('Erro ao tentar cadastrar a refeição')
     toast.error(error['message'])
+
+    if (typeof (callback) == 'object' && has(callback, 'onError'))
+      callback.onError?.()
+  }
+
+  if (typeof (callback) == 'function')
+    callback?.()
+  else if (typeof (callback) == 'object' && has(callback, 'onFinally'))
+    callback.onFinally?.()
+}
+
+export function* updateSnackSagas({ payload, callback }: updateSnack) {
+
+  const { snack_id, data } = payload
+  try {
+    const response: AxiosResponse = yield call(api.patch, `/snack/${snack_id}`, data, {
+      headers: {
+        Authorization: `Bearer ${AuthTokenHeader}`
+      }
+    })
+
+    if (response.status === 200) {
+      yield put({
+        type: ISnackTypes.UPDATE_SNACK_SUCCESS,
+        payload: response.data
+      })
+
+      toast.success('Refeição atualizada com sucesso')
+    }
+
+    if (typeof (callback) == 'object' && has(callback, 'onFinish'))
+      callback.onFinish?.(response)
+
+  } catch (error: any) {
+    toast.error('Erro ao tentar atualzar a refeição')
 
     if (typeof (callback) == 'object' && has(callback, 'onError'))
       callback.onError?.()
@@ -141,6 +176,7 @@ export function* fetchSummarySagas({ callback }: fetchSummary) {
 
 export default all([
   takeLatest(ISnackTypes.CREATE_SNACK, createSnackSagas),
+  takeLatest(ISnackTypes.UPDATE_SNACK, updateSnackSagas),
   takeLatest(ISnackTypes.FETCH_LIST_SNACK, fetchListSnackSagas),
   takeLatest(ISnackTypes.FETCH_DETAIL_SNACK, fetchDetailSnackSagas),
   takeLatest(ISnackTypes.FETCH_SUMMARY, fetchSummarySagas),

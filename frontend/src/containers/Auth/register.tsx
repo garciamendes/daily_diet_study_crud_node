@@ -30,6 +30,7 @@ export const Register = () => {
   }
 
   const handleSubmit = async (event: FormEvent) => {
+    event.stopPropagation()
     event.preventDefault()
 
     if (!form['name'] || !form['email'] || !form['password'] || !form['confirm_password']) {
@@ -56,16 +57,20 @@ export const Register = () => {
     setIsCreateUserLoading(true)
     dispatch(createUser(data, {
       onFinish: () => {
+        setIsCreateUserLoading(false)
         history.push('/')
       },
-      onFinally: () => { setIsCreateUserLoading(false) }
+      onError: () => setIsCreateUserLoading(false)
     }))
   }
 
   return (
     <ContainerMain>
       <div className='content-main'>
-        <button className='register-to register' onClick={() => history.goBack()}>
+        <button className='register-to register' onClick={(event) => {
+          event.stopPropagation()
+          history.goBack()
+        }}>
           <span>Login</span>
           <ArrowLeft size={20} />
         </button>

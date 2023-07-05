@@ -15,14 +15,14 @@ export const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/' exact component={Login} />
-        <Route path='/register' component={Register} />
+        <PublicRoute path='/' exact component={Login} />
+        <PublicRoute path='/register' component={Register} />
 
-        <Route path='/home' component={Home} />
-        <Route path='/snack/:id' component={SnackDetail} />
-        <Route path='/summary' component={Summary} />
+        <PrivateRoute path='/home' component={Home} />
+        <PrivateRoute path='/snack/:id' component={SnackDetail} />
+        <PrivateRoute path='/summary' component={Summary} />
 
-        <Route path='*' component={NotFound} />
+        <PrivateRoute path='*' component={NotFound} />
       </Switch>
     </BrowserRouter>
   )

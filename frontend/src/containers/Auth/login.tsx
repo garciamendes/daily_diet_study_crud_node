@@ -9,6 +9,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../store/modules/account/actions'
+import { isAuthenticated } from '../../components/utils/auth'
 
 export const Login = () => {
   // State
@@ -44,7 +45,8 @@ export const Login = () => {
     dispatch(loginUser(data, {
       onFinish: () => {
         setIsLoginUserLoading(false)
-        history.push('/home')
+        if (isAuthenticated())
+          history.push('/home')
       },
       onError: () => setIsLoginUserLoading(false)
     }))

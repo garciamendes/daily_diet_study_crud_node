@@ -9,6 +9,8 @@ import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import { map, split } from 'lodash'
 import { ArrowUpRight, Plus } from '@phosphor-icons/react'
+import secureLocalStorage from 'react-secure-storage'
+
 
 // Project
 import LogoImg from '../../static/images/logo.svg'
@@ -19,6 +21,7 @@ import { IUserData } from '../../store/modules/account/types'
 import { fetchListSnack } from '../../store/modules/snack/actions'
 import { Loader } from '../../components/loader'
 import { IListSnack } from '../../store/modules/snack/types'
+import { isAuthenticated } from '../../components/utils/auth'
 
 // Local
 import {
@@ -30,7 +33,6 @@ import {
   LabelColorSnack,
   StatisticInfo
 } from './styles'
-import secureLocalStorage from 'react-secure-storage'
 
 export const Home = () => {
   // Redux
@@ -49,7 +51,7 @@ export const Home = () => {
   useEffect(() => {
     handleFetchSummaryAndListSnacks()
     // return () => { dispatch(clearListSnack())}
-  }, [])
+  }, [isAuthenticated()])
 
   useEffect(() => {
     const userString = secureLocalStorage.getItem('user') as IUserData
@@ -60,7 +62,7 @@ export const Home = () => {
       setUserDate({ name: '#' })
     else
       setUserDate({ name: `${initialName[0]}${initialName[1]}`.toUpperCase() })
-  }, [])
+  }, [isAuthenticated()])
 
   const handleFetchSummaryAndListSnacks = () => {
     setFetchListSnackLoading(true)

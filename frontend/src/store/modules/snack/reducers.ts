@@ -42,6 +42,8 @@ export const fetchDetailSnackReducer = (state = default_state_detail_snack, acti
   return produce(state, draft => {
     switch (action.type) {
       case ISnackTypes.FETCH_DETAIL_SNACK_SUCCESS:
+      case ISnackTypes.UPDATE_SNACK_SUCCESS:
+        console.log(action.payload)
         draft = action.payload
         return draft
       case ISnackTypes.CLEAR_DETAIL_SNACK:

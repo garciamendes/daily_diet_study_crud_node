@@ -1,8 +1,11 @@
-import { createSnack, fetchDetailSnack, fetchListSnack, fetchSummary } from "./actions"
+import { createSnack, fetchDetailSnack, fetchListSnack, fetchSummary, updateSnack } from "./actions"
 
 export enum ISnackTypes {
   CREATE_SNACK = 'CREATE_SNACK',
   CREATE_SNACK_SUCCESS = 'CREATE_SNACK_SUCCESS',
+
+  UPDATE_SNACK = 'UPDATE_SNACK',
+  UPDATE_SNACK_SUCCESS = 'UPDATE_SNACK_SUCCESS',
 
   FETCH_LIST_SNACK = 'FETCH_LIST_SNACK',
   FETCH_LIST_SNACK_SUCCESS = 'FETCH_LIST_SNACK_SUCCESS',
@@ -43,6 +46,7 @@ export interface ISummary {
 }
 
 export type createSnack = ReturnType<typeof createSnack>
+export type updateSnack = ReturnType<typeof updateSnack>
 export type fetchListSnack = ReturnType<typeof fetchListSnack>
 export type fetchDetailSnack = ReturnType<typeof fetchDetailSnack>
 export type fetchSummary = ReturnType<typeof fetchSummary>

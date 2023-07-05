@@ -10,12 +10,13 @@ import { toast } from 'react-hot-toast'
 // Project
 import { Button, LabelColorSnack } from '../../containers/home/styles'
 import { ISnack } from '../../store/modules/snack/types'
-import { createSnack } from '../../store/modules/snack/actions'
+import { createSnack, updateSnack } from '../../store/modules/snack/actions'
 import { IState } from '../../store/utils/types'
 import { Loader } from '../loader'
 
 // Local
 import { ContainerMainModal, ContentIsDiet, ContentModal } from './styles'
+import { useParams } from 'react-router-dom'
 
 const default_state = {
   name: '', description: '', date: '', hour: '', is_diet: null
@@ -35,10 +36,12 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModal
   // State
   const [isDiet, setIsDiet] = useState<number | null>(null)
   const [createSnackLoading, setCreateSnackLoading] = useState(false)
+  const [updateSnackLoading, setUpdateSnackLoading] = useState(false)
   const [form, setForm] = useState<ISnack>(default_state)
 
   // Hook
   const dispatch = useDispatch()
+  const { id: snack_id } = useParams<{ id: string }>()
 
   useEffect(() => {
     if (isUpdate && !isEmpty(detail_snack)) {
@@ -88,6 +91,17 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModal
           setCreateSnackLoading(false)
         }
       }))
+    } else {
+      setUpdateSnackLoading(true)
+      dispatch(updateSnack(snack_id, data, {
+        onFinish: () => {
+          setUpdateSnackLoading(false)
+          finishModal()
+        },
+        onError: () => {
+          setUpdateSnackLoading(false)
+        }
+      }))
     }
   }
 
@@ -102,6 +116,7 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModal
 
     setForm({ ...form, [name]: value })
   }
+
   return (
     <ContainerMainModal open={open}>
       <ContentModal>
@@ -173,7 +188,7 @@ export const ModaSnackCreateUpdate = ({ open, onClose, isUpdate, fetch }: IModal
                 <Loader />
               </div>
             ) : (
-              <Button>Cadastrar refeição</Button>
+              <Button>{!isUpdate ? 'Cadastrar refeição' : 'Salvar'}</Button>
             )}
           </form>
         </div>

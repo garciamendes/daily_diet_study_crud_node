@@ -1,5 +1,5 @@
 // React
-import { Route, Redirect, match } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
 // Local
 import { isAuthenticated } from '../utils/auth'
