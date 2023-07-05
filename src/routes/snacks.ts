@@ -50,7 +50,6 @@ export async function snacksRoutes(server: FastifyInstance) {
     }
   }),
   server.patch('/snack/:id', { onRequest: [verifyJwt] }, async (request, reply) => {
-
     const updateSnack = z.object({
       name: z.string().optional(),
       description: z.string().optional(),
@@ -73,7 +72,9 @@ export async function snacksRoutes(server: FastifyInstance) {
     const user_id = request.user.sub
 
     await knex('snack').where('user_id', user_id).where('id', id).update({ name, description, date, hour, is_diet })
-    return reply.status(200).send({ message: 'Meal updated successfully' })
+    const snack = await knex('snack').where('user_id', user_id).where('id', id).first()
+    const USnack = { ...snack, user_id: undefined }
+    return reply.status(200).send(USnack)
   }),
   server.get('/snack', { onRequest: [verifyJwt] }, async (request, reply) => {
     const id = request.user.sub
