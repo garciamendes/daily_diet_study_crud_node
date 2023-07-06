@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "knex": "node --loader tsx ./node_modules/.bin/knex",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +31,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",
+    "tsup": "^7.1.0",
     "tsx": "^3.12.6",
     "typescript": "^5.0.4"
   }
