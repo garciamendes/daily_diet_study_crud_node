@@ -9,6 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "knex": "node --loader tsx ./node_modules/.bin/knex",
+    "migrate:dev": "knex migrate:latest",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src"
   },
@@ -24,6 +25,7 @@
     "fastify": "^4.15.0",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
+    "pg": "^8.11.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {

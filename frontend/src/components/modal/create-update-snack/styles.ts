@@ -21,6 +21,18 @@ export const ContentModal = styled.div`
   border-radius: 10px;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, .2);
 
+  @media only screen and (max-width: 1024px) {
+    & {
+      width: 60%;
+    }
+  }
+
+  @media only screen and (max-width: 667px) {
+    & {
+      width: 100%;
+    }
+  }
+
   header {
     height: 120px;
     width: 100%;

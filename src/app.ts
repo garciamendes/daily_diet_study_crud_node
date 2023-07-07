@@ -11,9 +11,9 @@ import { usersRoutes } from './routes/users'
 import { snacksRoutes } from './routes/snacks'
 
 export const server = fastify()
-
 server.register(cors, {
-  origin: env.ALLOWED_ORIGINS
+  origin: env.ALLOWED_ORIGINS,
+  credentials: true
 })
 
 server.register(fastifyJwt, {

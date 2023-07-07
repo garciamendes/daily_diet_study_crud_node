@@ -32,6 +32,18 @@ export const ContainerMainHome = styled.div`
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
     background: var(--white);
 
+    @media only screen and (max-width: 1024px) {
+      & {
+        width: 85%;
+      }
+    }
+
+    @media only screen and (max-width: 667px) {
+      & {
+        width: 100%;
+      }
+    }
+
     .info_detail_summary {
       margin-top: 1rem;
       color: var(--gray-1) !important;

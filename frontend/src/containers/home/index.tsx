@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 // Third party
 import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
-import { map, split } from 'lodash'
+import { map, split, truncate } from 'lodash'
 import { ArrowUpRight, Plus } from '@phosphor-icons/react'
 import secureLocalStorage from 'react-secure-storage'
 
@@ -148,7 +148,7 @@ export const Home = () => {
                       }}>
                         <strong className='hours'>{format(itemHour, 'HH:MM')}</strong>
                         <div className='content_name_snack_and_label'>
-                          <span className='title_snack'>{item.name}</span>
+                          <span className='title_snack'>{truncate(item.name, { length: 40 })}</span>
                           <LabelColorSnack bgColor={item.is_diet ? '#639339' : '#BF3B44'}></LabelColorSnack>
                         </div>
                       </ContentSnack>

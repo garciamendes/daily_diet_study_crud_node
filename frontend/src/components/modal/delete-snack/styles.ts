@@ -27,6 +27,19 @@ export const ContentModal = styled.div`
   width: 37%;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, .2);
 
+  @media only screen and (max-width: 1024px) {
+    & {
+      width: 55%;
+    }
+  }
+
+  @media only screen and (max-width: 667px) {
+    & {
+      flex-direction: column;
+      width: 75%;
+    }
+  }
+
   .container_delete {
     position: absolute;
     display: flex;
@@ -41,6 +54,12 @@ export const ContentModal = styled.div`
 
     & > strong {
       font-size: 1.3rem;
+
+      @media only screen and (max-width: 702px) {
+        & {
+          text-align: center;
+        }
+      }
     }
 
     .container-actions {
@@ -48,6 +67,12 @@ export const ContentModal = styled.div`
       gap: 2rem;
       margin-top: 5rem;
       width: 70%;
+
+      @media only screen and (max-width: 702px) {
+        & {
+          flex-direction: column;
+        }
+      }
     }
   }
 `

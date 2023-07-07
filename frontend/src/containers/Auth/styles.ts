@@ -117,12 +117,20 @@ export const ContainerMain = styled.div`
         opacity: 0;
         justify-content: center;
         align-items: center;
-        width: 20%;
+        width: 65%;
         padding: .7rem;
         border-radius: 6px;
         font-size: 1.1rem;
         color: var(--white);
         background: var(--red-dark);
+
+        @media only screen and (max-width: 480px) {
+          & {
+            top: 120px;
+            right: 5px;
+            width: 85%;
+          }
+        }
 
         span {
           font-weight: 600;
@@ -142,6 +150,24 @@ export const ContainerMain = styled.div`
       border-top-right-radius: 15px;
       border-top-left-radius: 15px;
       box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.3);
+
+      @media only screen and (max-width: 1325px) {
+        & {
+          width: 65%;
+        }
+      }
+
+      @media only screen and (max-width: 900px) {
+        & {
+          width: 75%;
+        }
+      }
+
+      @media only screen and (max-width: 700px) {
+        & {
+          width: 100%;
+        }
+      }
 
       > input {
         ${styleInput}

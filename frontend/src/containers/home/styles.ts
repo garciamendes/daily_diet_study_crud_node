@@ -19,6 +19,19 @@ export const ContainerMainHome = styled.div`
     width: 45%;
     height: 100%;
 
+    @media only screen and (max-width: 1024px) {
+      & {
+        width: 80%;
+      }
+    }
+
+    @media only screen and (max-width: 667px) {
+      & {
+        width: 100%;
+        padding: 0 .3rem;
+      }
+    }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -36,6 +49,12 @@ export const ContainerMainHome = styled.div`
         justify-content: end;
         gap: 10px;
         width: 15%;
+
+        @media only screen and (max-width: 667px) {
+          & {
+            width: 35%;
+          }
+        }
 
         span {
           cursor: pointer;

@@ -5,18 +5,14 @@ import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { toast } from 'react-hot-toast'
 
 // Project
-import { AuthTokenHeader, api } from '../../../services/api'
+import { api } from '../../../services/api'
 
 // Local
 import { ISnackTypes, createSnack, deleteSnack, fetchDetailSnack, fetchListSnack, fetchSummary, updateSnack } from './types'
 
 export function* createSnackSagas({ payload, callback }: createSnack) {
   try {
-    const response: AxiosResponse = yield call(api.post, '/snack', payload, {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.post, '/snack', payload)
 
     if (response.status === 201) {
       yield put({
@@ -48,11 +44,7 @@ export function* updateSnackSagas({ payload, callback }: updateSnack) {
 
   const { snack_id, data } = payload
   try {
-    const response: AxiosResponse = yield call(api.patch, `/snack/${snack_id}`, data, {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.patch, `/snack/${snack_id}`, data)
 
     if (response.status === 200) {
       yield put({
@@ -83,11 +75,7 @@ export function* deleteSnackSagas({ payload, callback }: deleteSnack) {
 
   const { snack_id } = payload
   try {
-    const response: AxiosResponse = yield call(api.delete, `/snack/${snack_id}`, {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.delete, `/snack/${snack_id}`)
 
     if (response.status === 204) {
       yield put({
@@ -115,11 +103,7 @@ export function* deleteSnackSagas({ payload, callback }: deleteSnack) {
 
 export function* fetchListSnackSagas({ callback }: fetchListSnack) {
   try {
-    const response: AxiosResponse = yield call(api.get, '/snack', {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.get, '/snack')
 
     if (response.status === 200) {
       yield put({
@@ -147,11 +131,7 @@ export function* fetchListSnackSagas({ callback }: fetchListSnack) {
 
 export function* fetchDetailSnackSagas({ payload, callback }: fetchDetailSnack) {
   try {
-    const response: AxiosResponse = yield call(api.get, `/snack/${payload.snack_id}`, {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.get, `/snack/${payload.snack_id}`)
 
     if (response.status === 200) {
       yield put({
@@ -179,11 +159,7 @@ export function* fetchDetailSnackSagas({ payload, callback }: fetchDetailSnack) 
 
 export function* fetchSummarySagas({ callback }: fetchSummary) {
   try {
-    const response: AxiosResponse = yield call(api.get, '/snack/summary', {
-      headers: {
-        Authorization: `Bearer ${AuthTokenHeader}`
-      }
-    })
+    const response: AxiosResponse = yield call(api.get, '/snack/summary')
 
     if (response.status === 200) {
       yield put({
