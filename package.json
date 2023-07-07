@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "knex": "node --loader tsx ./node_modules/.bin/knex",
-    "migrate:dev": "knex migrate:latest",
+    "migrate": "knex migrate:latest",
+    "migrate:roolback": "knex migrate:roolback",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src"
   },
