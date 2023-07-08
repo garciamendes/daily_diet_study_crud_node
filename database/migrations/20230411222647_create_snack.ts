@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('date').notNullable(),
     table.string('hour').notNullable(),
     table.boolean('is_diet').notNullable(),
-    table.integer('user_id').unsigned()
+    table.uuid('user_id').unsigned()
     table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE')
   })
 }
