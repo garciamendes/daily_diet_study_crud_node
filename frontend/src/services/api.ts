@@ -4,7 +4,7 @@ import secureLocalStorage from 'react-secure-storage'
 
 const Token = secureLocalStorage.getItem('token')
 export const api = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Authorization: `Bearer ${Token}`
   },
