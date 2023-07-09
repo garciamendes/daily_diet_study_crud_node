@@ -8,11 +8,11 @@ const styleInput = css`
 `
 
 export const ContainerMain = styled.div`
-  position: relative;
   display: flex;
   height: 100%;
 
   .content-main {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -105,30 +105,63 @@ export const ContainerMain = styled.div`
 
       .text-warning-active {
         opacity: 1 !important;
-        transition: .24s;
+        transition: .24s !important;
+        z-index: 3 !important;
       }
 
       .text-warning {
-        position: absolute;
+        position: fixed;
         cursor: pointer;
-        right: 7rem;
-        top: 55px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        bottom: 3px !important;
         display: flex;
         opacity: 0;
+        z-index: 0;
         justify-content: center;
         align-items: center;
-        width: 65%;
+        width: 40%;
+        height: max-content;
         padding: .7rem;
         border-radius: 6px;
         font-size: 1.1rem;
         color: var(--white);
         background: var(--red-dark);
 
+        @media only screen and (max-width: 1324px) {
+          & {
+            width: 62%;
+          }
+        }
+
+        @media only screen and (max-width: 901px) {
+          & {
+            width: 69%;
+          }
+        }
+
+        @media only screen and (max-width: 700px) {
+          & {
+            width: 93%;
+          }
+        }
+
         @media only screen and (max-width: 480px) {
           & {
-            top: 120px;
-            right: 5px;
-            width: 85%;
+            width: 95%;
+          }
+        }
+
+        @media only screen and (max-width: 480px) {
+          & {
+            width: 95%;
+          }
+        }
+
+        @media only screen and (max-width: 320px) {
+          & {
+            width: 95%;
+            bottom: -100px !important;
           }
         }
 
