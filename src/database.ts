@@ -4,7 +4,6 @@ import { knex as setupKnex, Knex } from 'knex'
 
 // Local
 import { env } from './env'
-
 export const config: Knex.Config = {
   client: env.DATABASE_CLIENT,
   connection: env.DATABASE_CLIENT === 'sqlite' ?
@@ -13,7 +12,8 @@ export const config: Knex.Config = {
   migrations: {
     extension: 'ts',
     directory: './database/migrations',
-  }
+  },
+  searchPath: ['knex', 'public'],
 }
 
 export const knex = setupKnex(config)
