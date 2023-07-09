@@ -111,7 +111,7 @@ export const Register = () => {
             onChange={event => setForm({ ...form, [event.target.name]: event.target.value })}
             required />
 
-          <button type='submit'>{isCreateUserLoading ? 'Carregando...' : 'Registrar'}</button>
+          <button type='submit' disabled={isCreateUserLoading}>{isCreateUserLoading ? 'Carregando...' : 'Registrar'}</button>
         </form>
       </div>
     </ContainerMain>
