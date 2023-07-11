@@ -14,8 +14,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsup src && knex migrate:latest",
     "install": "npm install",
-    "run:start": "node dist/server.js",
-    "start": "run-s run:start"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
