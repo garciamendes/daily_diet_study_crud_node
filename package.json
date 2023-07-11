@@ -13,8 +13,9 @@
     "migrate:rollback": "knex migrate:rollback",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src",
+    "install": "npm install",
     "run:start": "node dist/server.js",
-    "start": "run-s build migrate run:start"
+    "start": "run-s install build migrate run:start"
   },
   "keywords": [],
   "author": "",
