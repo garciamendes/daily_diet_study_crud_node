@@ -12,7 +12,8 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src && knex migrate:latest",
+    "compliance": "tsup src",
+    "build": "run-s compliance migrate",
     "start": "node dist/server.js"
   },
   "keywords": [],
