@@ -12,10 +12,10 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src",
+    "build": "tsup src && knex migrate:latest",
     "install": "npm install",
     "run:start": "node dist/server.js",
-    "start": "run-s install build migrate run:start"
+    "start": "run-s run:start"
   },
   "keywords": [],
   "author": "",
