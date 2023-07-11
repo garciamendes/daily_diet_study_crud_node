@@ -2,7 +2,7 @@
   "name": "daily_diet_study_crud_node",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "engines": {
     "node": "18"
   },
@@ -12,7 +12,8 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src"
+    "build": "tsup src",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
